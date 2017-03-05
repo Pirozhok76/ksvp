@@ -13,7 +13,7 @@ R2 = 288.3
 R1 = 287
 z1 = 1
 z2 = 1
-
+r1 = 1
 k1 = 1.4
 k2 = 1.33
 
@@ -29,7 +29,7 @@ lst = []
 m_fz = []
 
 resr2 = []
-
+Mzms = [0]
 allM1 = []
 allPiks = []
 allr2 =[]
@@ -93,39 +93,64 @@ def calc_part():
 
 
 
+    # piks = piks_min
+    # while piks <= piks_max:
+    #
+    #     r2 = r2_min
+    #     rm0 = (1 + r2_min) / 2
+    #     rm = rm0 + 0.001
+    #     while r2 <= r2_max:
+    #
+    #         # r = r2
+    #
+    #
+    #         '''theta2 = theta2_min'''
+    #         theta2 = 1.01
+    #         # while r <= 1:
+    #         pi0 = pi0_min
+    #         res = main_calc(piks, pi0, theta2, r2, epsi, rm)
+    #         # pi0 = pi0_min
+    #         # while pi0 <= pi0_max:
+    #         #     res = main_calc(piks, pi0, theta2, r2, epsi, rm)
+    #         #
+    #         #
+    #         #     pi0 += pi0_d
+    #         #     # r += r_d
+    #         rm += rm_d
+    #
+    #
+    #         r2 += r2_d
+    #
+    #
+    #
+    #     piks += piks_d
+
     piks = piks_min
     while piks <= piks_max:
 
-        r2 = r2_min
-        rm0 = (1 + r2_min) / 2
+        r2 = 0.5
+        rm0 = (1 + r2) / 2
         rm = rm0 + 0.001
-        while r2 <= r2_max:
-
-            # r = r2
+        # r = r2
 
 
-            '''theta2 = theta2_min'''
-            theta2 = 1.01
-            # while r <= 1:
-            pi0 = pi0_min
-            res = main_calc(piks, pi0, theta2, r2, epsi, rm)
-            # pi0 = pi0_min
-            # while pi0 <= pi0_max:
-            #     res = main_calc(piks, pi0, theta2, r2, epsi, rm)
-            #
-            #
-            #     pi0 += pi0_d
-            #     # r += r_d
-            rm += rm_d
+        '''theta2 = theta2_min'''
+        theta2 = 1.01
+        # while r <= 1:
+        pi0 = pi0_min
+        res = main_calc(piks, pi0, theta2, r2, epsi, rm)
+        # pi0 = pi0_min
+        # while pi0 <= pi0_max:
+        #     res = main_calc(piks, pi0, theta2, r2, epsi, rm)
+        #
+        #
+        #     pi0 += pi0_d
+        #     # r += r_d
+        # rm += rm_d
 
-
-            r2 += r2_d
-
-
+        # r2 += r2_d
 
         piks += piks_d
-
-
 
 
 
@@ -200,8 +225,12 @@ def main_calc(piks, pi0, theta2, r2, epsi, rm):
         #
 
 
-        _Mzm = a * (rm ** 2) + b * rm + c
+        # _Mzm = a * (rm ** 2) + b * rm + c
+        n = 0.05
+        Mz1 = M1 / ((1 + epsi ** 2)** 0.5)
+        Mzm = Mz1 + n * Mz1
 
+        _Mzm = Mzm/Mz1
 
         #
         # _Mz = a * (r ** 2) + b * r + c
@@ -254,7 +283,15 @@ def main_calc(piks, pi0, theta2, r2, epsi, rm):
         # print(m)
         # print(delta2)
         # print (rm , 'r2 = ',r2)
+
+        r3 = delta2 + r1
+
+
+
         allr2.append(r2)
+        allr2.append(r3)
+        allr2.append(rm)
+        Mzms.append(_Mzm)
         # lst.append({
         #     #     'Pikc': piks,
         #     'r2': r2,
@@ -262,18 +299,18 @@ def main_calc(piks, pi0, theta2, r2, epsi, rm):
         #     'delta': delta2
         # })
 
-        if (delta2 >= 0) and (delta2 <= 0.001):
-            print('delta = ', delta2)
-            allr2.append (r2)
-            lst.append({
-            #     'Pikc': piks,
-                'r2': r2,
-                'M1': M1,
-                'delta': delta2,
-                '_Mzm': _Mzm
-            })
+        # if (delta2 >= 0) and (delta2 <= 0.001):
+        #     print('delta = ', delta2)
+        #     allr2.append (r2)
+        #     lst.append({
+        #     #     'Pikc': piks,
+        #         'r2': r2,
+        #         'M1': M1,
+        #         'delta': delta2,
+        #         '_Mzm': _Mzm
+        #     })
 
-        allr2.append (r2)
+        # allr2.append (r2)
         # lst.append({
         # #     'Pikc': piks,
         #     'r2': r2,
@@ -344,10 +381,19 @@ def vis2(allr2, allPiks):
     plt.grid(True)  # Сетка
     plt.show()  # Показать график
 
+def vis3(allr2, Mzms):
+    plt.plot(Mzms, allr2)
+    plt.xlabel(r'$Mzms$')  # Метка по оси x в формате TeX
+    plt.ylabel(r'$r2$')  # Метка по оси y в формате TeX
+    # plt.title(r'$y=x^2$')  # Заголовок в формате TeX
+    plt.grid(True)  # Сетка
+    plt.show()  # Показать график
+
 if __name__ == '__main__':
 
     calc_part()
-    run()
+    # run()
+    vis3(allr2, Mzms)
     # vis(allPiks, allM1)
     # vis1(allr2, allM1)
     # vis2(allr2, allPiks)
